@@ -1,9 +1,10 @@
 import requests
-from credentials import api_key
+from twilio.rest import Client
+from credentials import api_key, auth_t, acc_sid
 
 parameters = {
-    "lat": 38.6295,
-    "lon": -90.1983,
+    "lat": 47.606209,
+    "lon": -122.332069,
     "units": "imperial",
     "appid": api_key,
     "cnt": 4,
@@ -25,4 +26,11 @@ for hourly_data in data["list"]:
     if condition_code < 700:
         will_rain = True
 if will_rain:
-    print("Bring an umbrella.")
+    client = Client(acc_sid, auth_t)
+
+    message = client.messages.create(
+        from_="+18337841087",
+        body="It is going to rain today. Bring an ☂️",
+        to="+18777804236"
+    )
+    print(message.status)
